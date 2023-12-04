@@ -17,6 +17,7 @@ const textStyle = {
 
 export default function StarRaiting({ maxRating = 5 }) {
   const [raiting, setRaiting] = useState(0);
+  const [tempRating, setTempRating] = useState(0);
 
   function handleRating(raiting) {
     setRaiting(raiting);
@@ -28,15 +29,18 @@ export default function StarRaiting({ maxRating = 5 }) {
         {Array.from({ length: maxRating }, (_, i) => (
           <Star
             key={i}
+            full={tempRating ? tempRating >= i + 1 : raiting >= i + 1}
             onRate={() => handleRating(i + 1)}
-            full={raiting >= i + 1}
+            onHoverIn={() => setTempRating(i + 1)}
+            onHoverOut={() => setTempRating(0)}
           /> //slusa koju so zvezdu kliknuli u nizu i dodaje +1 zbog niza
           //ovde slusa sta cemo da kliknemo
           //pravimo nas hook uz pomoc kojeg saljemo funkciju koja ce da se vrati u parent comp
           //u funckiji star prihvatamo onRate prop koji smo poslali i aktivira se onClick
         ))}
       </div>
-      <p style={textStyle}>{raiting || ""}</p>
+      <p style={textStyle}>{tempRating || raiting || ""}</p>
+      {/* If we have temp rating use it, if dont use raiting, if dont use empty string  */}
     </div>
   );
 }
@@ -48,9 +52,15 @@ const starStyle = {
   cursor: "pointer",
 };
 
-function Star({ onRate, full }) {
+function Star({ onRate, full, onHoverIn, onHoverOut }) {
   return (
-    <span role="button" style={starStyle} onClick={onRate}>
+    <span
+      role="button"
+      style={starStyle}
+      onClick={onRate}
+      onMouseEnter={onHoverIn}
+      onMouseLeave={onHoverOut}
+    >
       {full ? (
         <svg
           xmlns="http://www.w3.org/2000/svg"
