@@ -56,20 +56,37 @@ export default function App() {
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+
   const query = "interstellar";
 
   useEffect(function () {
     async function fetchMovies() {
-      setIsLoading(true);
+      try {
+        setIsLoading(true);
 
-      const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${query}
+        const res =
+          await fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${query}
       `);
-      const data = await res.json();
-      setMovies(data.Search);
-      // .then((res) => res.json())
-      // .then((data) => setMovies(data.Search));
 
-      setIsLoading(false);
+        if (!res.ok)
+          throw new Error("Something went wrong with fetching movies");
+
+        const data = await res.json();
+
+        if (data.Response === "False") throw new Error("Movie not found ❌");
+        //ovaj error ce baciti kada ne moze da nadje film sa tim nazivom i da ne bi srusilo app, bacice ovaj error
+
+        setMovies(data.Search);
+        // .then((res) => res.json())
+        // .then((data) => setMovies(data.Search));
+      } catch (err) {
+        console.error(err);
+        setError(err.message);
+      } finally {
+        //ovo se cita kad a je error i prskoci ceo ostatak koda u try bloku kada bacimo gresku
+        setIsLoading(false);
+      }
     }
     fetchMovies();
   }, []);
@@ -84,7 +101,13 @@ export default function App() {
       </NavBar>
 
       <Main>
-        <Box>{isLoading ? <Loader /> : <MovieList movies={movies} />}</Box>
+        <Box>
+          {/* {isLoading ? <Loader /> : <MovieList movies={movies} />} */}
+          {isLoading && <Loader />}
+          {!isLoading && !error && <MovieList movies={movies} />}
+          {error && <ErrorMessage message={error} />}
+          {/* just one of these 3 can be used  */}
+        </Box>
         {/* <WatchedBox /w> */}
         <Box>
           <WatchedSummary watched={watched} />
@@ -140,6 +163,14 @@ function NumResults({ movies }) {
 
 function Main({ children }) {
   return <main className="main">{children}</main>;
+}
+
+function ErrorMessage({ message }) {
+  return (
+    <p className="error">
+      <span>❌</span> {message}
+    </p>
+  );
 }
 
 function Box({ children }) {
