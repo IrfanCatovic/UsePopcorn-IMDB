@@ -53,50 +53,81 @@ const average = (arr) =>
 const KEY = "100db50b";
 
 export default function App() {
+  const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const query = "Friends";
+  const tempQuery = "Friends";
 
-  useEffect(function () {
-    async function fetchMovies() {
-      try {
-        setIsLoading(true);
+  //effects
+  useEffect(
+    function () {
+      async function fetchMovies() {
+        try {
+          setIsLoading(true);
+          setError(""); //Da nemamo ovo na pocetku bi pisalo da nema pronadjenih filmova
 
-        const res =
-          await fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${query}
+          const res =
+            await fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${query}
       `);
 
-        if (!res.ok)
-          throw new Error("Something went wrong with fetching movies");
+          if (!res.ok)
+            throw new Error("Something went wrong with fetching movies");
 
-        const data = await res.json();
+          const data = await res.json();
 
-        if (data.Response === "False") throw new Error("Movie not found ❌");
-        //ovaj error ce baciti kada ne moze da nadje film sa tim nazivom i da ne bi srusilo app, bacice ovaj error
+          if (data.Response === "False") throw new Error("Movie not found ❌");
+          //ovaj error ce baciti kada ne moze da nadje film sa tim nazivom i da ne bi srusilo app, bacice ovaj error
 
-        setMovies(data.Search);
-        // .then((res) => res.json())
-        // .then((data) => setMovies(data.Search));
-      } catch (err) {
-        console.error(err);
-        setError(err.message);
-      } finally {
-        //ovo se cita kad a je error i prskoci ceo ostatak koda u try bloku kada bacimo gresku
-        setIsLoading(false);
+          setMovies(data.Search);
+          // .then((res) => res.json())
+          // .then((data) => setMovies(data.Search));
+        } catch (err) {
+          setError(err.message);
+        } finally {
+          //ovo se cita kad a je error i prskoci ceo ostatak koda u try bloku kada bacimo gresku
+          setIsLoading(false);
+        }
       }
-    }
-    fetchMovies();
+
+      if (query.length < 3) {
+        setMovies([]);
+        setError("");
+        return;
+        //ovo je napravljeno da ne trazi filmove ispod 3 slova i da ne prijavljuje gresku
+      }
+
+      fetchMovies();
+    },
+    [query]
+  );
+
+  /*
+  useEffect(function () {
+    console.log("After initial render");
   }, []);
 
+  useEffect(function () {
+    console.log("After every render");
+  });
+
+  useEffect(
+    function () {
+      console.log("When change search");
+    },
+    [query]
+  );
+
+  console.log("During render");
+*/
   //[] dependency array,
 
   return (
     <>
       <NavBar>
-        <Search />
+        <Search query={query} setQuery={setQuery} />
         <NumResults movies={movies} />
       </NavBar>
 
@@ -140,8 +171,7 @@ function Logo() {
   );
 }
 
-function Search() {
-  const [query, setQuery] = useState("");
+function Search({ query, setQuery }) {
   return (
     <input
       className="search"
