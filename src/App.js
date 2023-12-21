@@ -291,6 +291,7 @@ function Movie({ movie, onSelectMovie }) {
 function MovieDetails({ selectedId, onCloseMovie, onAddWatched }) {
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [userRating, setUserRating] = useState("");
 
   const {
     Title: title,
@@ -316,6 +317,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched }) {
     };
 
     onAddWatched(newWatchedMovie);
+    onCloseMovie();
   }
 
   useEffect(
@@ -359,8 +361,12 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched }) {
           </header>
 
           <section>
-            <div className="raiting">
-              <StarRaiting maxRating={10} size={24} />
+            <div className="rating">
+              <StarRaiting
+                maxRating={10}
+                size={24}
+                onSetRating={setUserRating}
+              />
 
               <button className="btn-add" onClick={handleAdd}>
                 + Add to list
@@ -368,9 +374,9 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched }) {
             </div>
             <p>
               <em>{plot}</em>
-              <p>Starring: {actors}</p>
-              <p>Directed by {director}</p>
             </p>
+            <p>Starring {actors}</p>
+            <p>Directed by {director}</p>
           </section>
         </>
       )}
@@ -421,7 +427,7 @@ function WatcedMovie({ movie }) {
   return (
     <li>
       <img src={movie.poster} alt={`${movie.title} poster`} />
-      <h3>{movie.Title}</h3>
+      <h3>{movie.title}</h3>
       <div>
         <p>
           <span>⭐️</span>
