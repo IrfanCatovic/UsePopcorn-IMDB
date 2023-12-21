@@ -309,6 +309,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
   //uporedjuje selektovani film sa niz gledanih filmova
   // ?.  ako postoji onda je watchedUserRating jedan userRating
 
+  //Ovaj objekat je da registrujemo za listu filmova
   const {
     Title: title,
     Year: year,
@@ -322,6 +323,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     Genre: genre,
   } = movie;
 
+  //ovaj objekat je da registrujemo za listu gledanih filmova
   function handleAdd() {
     const newWatchedMovie = {
       imdbID: selectedId, //koliko sam razumeo
@@ -336,6 +338,13 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     onAddWatched(newWatchedMovie);
     onCloseMovie();
   }
+
+  useEffect(
+    function () {
+      document.title = `Movie | ${title}`;
+    },
+    [title]
+  );
 
   useEffect(
     function () {
