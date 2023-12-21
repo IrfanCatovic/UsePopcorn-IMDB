@@ -73,6 +73,10 @@ export default function App() {
     setWatched((watched) => [...watched, movie]);
   }
 
+  function handleDeleteWatched(id) {
+    setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
+  }
+
   //effects
   useEffect(
     function () {
@@ -165,7 +169,10 @@ export default function App() {
           ) : (
             <>
               <WatchedSummary watched={watched} />
-              <WatchedMoviesList watched={watched} />
+              <WatchedMoviesList
+                watched={watched}
+                onHandleDeleteWatched={handleDeleteWatched}
+              />
             </>
           )}
         </Box>
@@ -415,11 +422,11 @@ function WatchedSummary({ watched }) {
         </p>
         <p>
           <span>⭐️</span>
-          <span>{avgImdbRating}</span>
+          <span>{avgImdbRating.toFixed(2)}</span>
         </p>
         <p>
           <span>🌟</span>
-          <span>{avgUserRating}</span>
+          <span>{avgUserRating.toFixed(2)}</span>
         </p>
         <p>
           <span>⏳</span>
@@ -430,17 +437,21 @@ function WatchedSummary({ watched }) {
   );
 }
 
-function WatchedMoviesList({ watched }) {
+function WatchedMoviesList({ watched, onHandleDeleteWatched }) {
   return (
     <ul className="list">
       {watched.map((movie) => (
-        <WatcedMovie movie={movie} key={movie.imdbID} />
+        <WatcedMovie
+          movie={movie}
+          key={movie.imdbID}
+          onHandleDeleteWatched={onHandleDeleteWatched}
+        />
       ))}
     </ul>
   );
 }
 
-function WatcedMovie({ movie }) {
+function WatcedMovie({ movie, onHandleDeleteWatched }) {
   return (
     <li>
       <img src={movie.poster} alt={`${movie.title} poster`} />
@@ -458,6 +469,13 @@ function WatcedMovie({ movie }) {
           <span>⏳</span>
           <span>{movie.runtime} min</span>
         </p>
+
+        <button
+          className="btn-delete"
+          onClick={() => onHandleDeleteWatched(movie.imdbID)}
+        >
+          X
+        </button>
       </div>
     </li>
   );
