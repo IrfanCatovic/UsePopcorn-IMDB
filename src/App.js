@@ -121,6 +121,8 @@ export default function App() {
         //ovo je napravljeno da ne trazi filmove ispod 3 slova i da ne prijavljuje gresku
       }
 
+      handleCloseMovie(); //kada imamo otvoren film i pisemo novi u pretragu pre nego sto
+      //fetchuje novu listu filmova, ovaj prosli ce da iskljuci
       fetchMovies();
 
       return function () {
@@ -350,6 +352,22 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     onAddWatched(newWatchedMovie);
     onCloseMovie();
   }
+
+  useEffect(
+    function () {
+      function callback(e) {
+        if (e.code === "Escape") {
+          onCloseMovie();
+        }
+      }
+      document.addEventListener("keydown", callback);
+
+      return function () {
+        document.removeEventListener("keydown", callback); //moramo da cistimo da se ne bi dodavali evenListener svaki pud kada zatvorimo film
+      };
+    },
+    [onCloseMovie]
+  );
 
   useEffect(
     function () {
