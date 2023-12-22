@@ -80,14 +80,17 @@ export default function App() {
   //effects
   useEffect(
     function () {
+      const controller = new AbortController(); //browser API
+
       async function fetchMovies() {
         try {
           setIsLoading(true);
           setError(""); //Da nemamo ovo na pocetku bi pisalo da nema pronadjenih filmova
 
-          const res =
-            await fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${query}
-      `);
+          const res = await fetch(
+            `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
+            { signal: controller.signal } //da povezemo sa fetchom controller
+          );
 
           if (!res.ok)
             throw new Error("Something went wrong with fetching movies");
@@ -100,8 +103,11 @@ export default function App() {
           setMovies(data.Search);
           // .then((res) => res.json())
           // .then((data) => setMovies(data.Search));
+          setError("");
         } catch (err) {
-          setError(err.message);
+          if (err.name !== "AbortError") {
+            setError(err.message);
+          }
         } finally {
           //ovo se cita kad a je error i prskoci ceo ostatak koda u try bloku kada bacimo gresku
           setIsLoading(false);
@@ -116,6 +122,12 @@ export default function App() {
       }
 
       fetchMovies();
+
+      return function () {
+        controller.abort(); // da bismo zaustavili previse http req na stranici, dok npr pretrazujemo da nam ne stize previse odgovora
+        //kada god unosimo novo slovo u pretragu on onaj prosli http req zaustavlja i otpocinje novi
+        //tako funkcionise sve dok se ne zaustavimo kod poslednjeg
+      };
     },
     [query]
   );
