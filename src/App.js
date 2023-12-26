@@ -235,6 +235,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
   // ?.  ako postoji onda je watchedUserRating jedan userRating
 
   //Ovaj objekat je da registrujemo za listu filmova
+
   const {
     Title: title,
     Year: year,
@@ -247,6 +248,11 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     Director: director,
     Genre: genre,
   } = movie;
+
+  // const isTop = imdbRating > 8;
+  // console.log(isTop);
+
+  // const [avgRating, setAvgRating] = useState(0);
 
   //ovaj objekat je da registrujemo za listu gledanih filmova
   function handleAdd() {
@@ -261,6 +267,8 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     };
 
     onAddWatched(newWatchedMovie);
+    // setAvgRating(Number(imdbRating));
+    // setAvgRating((x) => (x + userRating) / 2);
     onCloseMovie();
   }
 
@@ -330,7 +338,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
               </p>
             </div>
           </header>
-
+          {/* <p>{avgRating}</p> */}
           <section>
             <div className="rating">
               {!isWatched ? (
