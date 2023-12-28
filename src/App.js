@@ -12,6 +12,7 @@ export default function App() {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+
   // const [watched, setWatched] = useState([]);
   const [watched, setWatched] = useState(function () {
     const storedValue = localStorage.getItem("watched");
@@ -39,7 +40,7 @@ export default function App() {
   //effects
   useEffect(
     function () {
-      localStorage.setItem("watched", JSON.stringify([watched])); //ovde nam ne treba niz jer cemo da ubacujemo film u list kada god se WATCHED update
+      localStorage.setItem("watched", JSON.stringify(watched)); //ovde nam ne treba niz jer cemo da ubacujemo film u list kada god se WATCHED update
     },
     [watched]
   );
