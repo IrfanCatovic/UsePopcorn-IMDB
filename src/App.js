@@ -165,6 +165,11 @@ function Logo() {
 }
 
 function Search({ query, setQuery }) {
+  useEffect(function () {
+    // const el = document.querySelector(".search");
+    // console.log(el);
+    // el.focus(); it is correct way to select search at start app, but it's more JavaScript way than React way
+  }, []);
   return (
     <input
       className="search"
