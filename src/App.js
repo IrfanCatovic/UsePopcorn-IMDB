@@ -24,6 +24,8 @@ export default function App() {
 
   function handleAddWatched(movie) {
     setWatched((watched) => [...watched, movie]);
+
+    //localStorage.setItem("watched", JSON.stringify([...watched, movie])); //name of key, name of data we want to store and second part is DATA
   }
 
   function handleDeleteWatched(id) {
@@ -31,6 +33,13 @@ export default function App() {
   }
 
   //effects
+  useEffect(
+    function () {
+      localStorage.setItem("watched", JSON.stringify([watched])); //ovde nam ne treba niz jer cemo da ubacujemo film u list kada god se WATCHED update
+    },
+    [watched]
+  );
+
   useEffect(
     function () {
       const controller = new AbortController(); //browser API
