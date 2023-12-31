@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import StarRaiting from "./StarRaiting";
+import { useMovies } from "./useMovies";
 
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
@@ -7,11 +8,10 @@ const average = (arr) =>
 const KEY = "100db50b";
 
 export default function App() {
-  const [selectedId, setSelectedId] = useState(null);
   const [query, setQuery] = useState("");
-  const [movies, setMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [selectedId, setSelectedId] = useState(null);
+
+  const { movies, isLoading, error } = useMovies(query); //CUSTOM HOOK POZIVAMO KOJI SMO NAPRAVILI
 
   // const [watched, setWatched] = useState([]);
   const [watched, setWatched] = useState(function () {
@@ -43,62 +43,6 @@ export default function App() {
       localStorage.setItem("watched", JSON.stringify(watched)); //ovde nam ne treba niz jer cemo da ubacujemo film u list kada god se WATCHED update
     },
     [watched]
-  );
-
-  useEffect(
-    function () {
-      const controller = new AbortController(); //browser API
-
-      async function fetchMovies() {
-        try {
-          setIsLoading(true);
-          setError(""); //Da nemamo ovo na pocetku bi pisalo da nema pronadjenih filmova
-
-          const res = await fetch(
-            `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
-            { signal: controller.signal } //da povezemo sa fetchom controller
-          );
-
-          if (!res.ok)
-            throw new Error("Something went wrong with fetching movies");
-
-          const data = await res.json();
-
-          if (data.Response === "False") throw new Error("Movie not found ❌");
-          //ovaj error ce baciti kada ne moze da nadje film sa tim nazivom i da ne bi srusilo app, bacice ovaj error
-
-          setMovies(data.Search);
-          // .then((res) => res.json())
-          // .then((data) => setMovies(data.Search));
-          setError("");
-        } catch (err) {
-          if (err.name !== "AbortError") {
-            setError(err.message);
-          }
-        } finally {
-          //ovo se cita kad a je error i prskoci ceo ostatak koda u try bloku kada bacimo gresku
-          setIsLoading(false);
-        }
-      }
-
-      if (query.length < 3) {
-        setMovies([]);
-        setError("");
-        return;
-        //ovo je napravljeno da ne trazi filmove ispod 3 slova i da ne prijavljuje gresku
-      }
-
-      handleCloseMovie(); //kada imamo otvoren film i pisemo novi u pretragu pre nego sto
-      //fetchuje novu listu filmova, ovaj prosli ce da iskljuci
-      fetchMovies();
-
-      return function () {
-        controller.abort(); // da bismo zaustavili previse http req na stranici, dok npr pretrazujemo da nam ne stize previse odgovora
-        //kada god unosimo novo slovo u pretragu on onaj prosli http req zaustavlja i otpocinje novi
-        //tako funkcionise sve dok se ne zaustavimo kod poslednjeg
-      };
-    },
-    [query]
   );
 
   return (
@@ -269,7 +213,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
 
   useEffect(
     function () {
-      if (userRating) countRef.current = countRef.current + 1;
+      if (userRating) countRef.current = countRef.current++;
       console.log(countRef);
     },
     [userRating]
