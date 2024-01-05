@@ -3,7 +3,8 @@ import { useState, useEffect } from "react";
 export function useLocalStorageState(initialState, key) {
   const [value, setValue] = useState(function () {
     const storedValue = localStorage.getItem(key);
-    return JSON.parse(storedValue); //moramo da parsamo jer u database ga cuvamo kao string, a sad ga ne razume bez toga
+    return storedValue ? JSON.parse(storedValue) : initialState; //zbog bugg proveravamo da li je lista prazna da ne vraca null
+    //moramo da parsamo jer u database ga cuvamo kao string, a sad ga ne razume bez toga
   });
 
   useEffect(
