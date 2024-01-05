@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import StarRaiting from "./StarRaiting";
 import { useMovies } from "./useMovies";
+import { useKey } from "./useKey";
 import { useLocalStorageState } from "./useLocalStorageState";
 
 const average = (arr) =>
@@ -263,21 +264,23 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     onCloseMovie();
   }
 
-  useEffect(
-    function () {
-      function callback(e) {
-        if (e.code === "Escape") {
-          onCloseMovie();
-        }
-      }
-      document.addEventListener("keydown", callback);
+  useKey("Escape", onCloseMovie);
 
-      return function () {
-        document.removeEventListener("keydown", callback); //moramo da cistimo da se ne bi dodavali evenListener svaki pud kada zatvorimo film
-      };
-    },
-    [onCloseMovie]
-  );
+  // useEffect(
+  //   function () {
+  //     function callback(e) {
+  //       if (e.code === "Escape") {
+  //         onCloseMovie();
+  //       }
+  //     }
+  //     document.addEventListener("keydown", callback);
+
+  //     return function () {
+  //       document.removeEventListener("keydown", callback); //moramo da cistimo da se ne bi dodavali evenListener svaki pud kada zatvorimo film
+  //     };
+  //   },
+  //   [onCloseMovie]
+  // );
 
   useEffect(
     function () {
