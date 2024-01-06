@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App";
 import CurrencyTask from "./CurrencyTask";
 import StarRaiting from "./StarRaiting";
+import Location from "./Location";
 
 // function Test() {
 //   const [movieRating, setMovieRating] = useState(0);
@@ -20,6 +21,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <App />
+    {/* <Location /> */}
     {/* <CurrencyTask /> */}
     {/* <StarRaiting
       maxRating={5}
