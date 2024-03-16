@@ -18,7 +18,7 @@ export function useMovies(query) {
           setError(""); //Da nemamo ovo na pocetku bi pisalo da nema pronadjenih filmova
 
           const res = await fetch(
-            `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
+            `https://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
             { signal: controller.signal } //da povezemo sa fetchom controller
           );
 
