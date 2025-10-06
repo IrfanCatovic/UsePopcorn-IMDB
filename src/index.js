@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
+// import App_v2 from "./App_v2";
 import App from "./App";
 import CurrencyTask from "./CurrencyTask";
 import StarRaiting from "./StarRaiting";
 import Location from "./Location";
+import Vezba from "./Vezba";
 
 // function Test() {
 //   const [movieRating, setMovieRating] = useState(0);
@@ -20,9 +22,10 @@ import Location from "./Location";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    {/* <App /> */}
     {/* <Location /> */}
     {/* <CurrencyTask /> */}
+    <Vezba />
     {/* <StarRaiting
       maxRating={5}
       messages={["Bad", "Not Bad", "Good", "Great", "Amazing"]}

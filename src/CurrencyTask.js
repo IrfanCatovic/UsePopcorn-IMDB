@@ -46,7 +46,6 @@ export default function CurrencyTask() {
         <option value="CAD">CAD</option>
         <option value="INR">INR</option>
       </select>
-
       <select
         value={convCurrency}
         onChange={(e) => setConvCurrency(e.target.value)}
