@@ -22,10 +22,10 @@ import Vezba from "./Vezba";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    {/* <App /> */}
+    <App />
     {/* <Location /> */}
     {/* <CurrencyTask /> */}
-    <Vezba />
+    {/* <Vezba /> */}
     {/* <StarRaiting
       maxRating={5}
       messages={["Bad", "Not Bad", "Good", "Great", "Amazing"]}
