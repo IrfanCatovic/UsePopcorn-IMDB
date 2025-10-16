@@ -3,6 +3,7 @@ import StarRaiting from "./StarRaiting";
 import { useMovies } from "./useMovies";
 import { useKey } from "./useKey";
 import { useLocalStorageState } from "./useLocalStorageState";
+import Search from "./components/Search";
 
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
@@ -103,51 +104,6 @@ function Logo() {
       <span role="img">🍿</span>
       <h1>usePopcorn</h1>
     </div>
-  );
-}
-
-function Search({ query, setQuery }) {
-  const inputEl = useRef(null);
-
-  useKey("Enter", function () {
-    if (document.activeElement === inputEl.current) return;
-
-    inputEl.current.focus();
-    setQuery("");
-  });
-
-  // useEffect(
-  //   function () {
-  //     function callback(e) {
-  //       if (e.code === "Enter") {
-  //         if (document.activeElement === inputEl.current) return;
-
-  //         inputEl.current.focus();
-  //         setQuery("");
-  //       }
-  //     }
-
-  //     document.addEventListener("keydown", callback);
-  //     return () => document.addEventListener("keydown", callback);
-  //   },
-  //   [setQuery]
-  // );
-
-  useEffect(function () {
-    const el = document.querySelector(".search");
-    console.log(el);
-    el.focus(); //it is correct way to select search at start app, but it's more JavaScript way than React way
-  }, []);
-
-  return (
-    <input
-      className="search"
-      type="text"
-      placeholder="Search movies..."
-      value={query}
-      onChange={(e) => setQuery(e.target.value)}
-      ref={inputEl}
-    />
   );
 }
 
@@ -310,6 +266,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
         );
         const data = await res.json();
         setMovie(data);
+
         setIsLoading(false);
       }
       getMovieDetails();
