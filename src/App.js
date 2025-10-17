@@ -3,6 +3,8 @@ import { useMovies } from "./useMovies";
 import { useLocalStorageState } from "./useLocalStorageState";
 import Search from "./components/Search";
 import MovieDetails from "./components/MovieDetails";
+import MovieList from "./components/MovieList";
+import Movie from "./components/Movie";
 
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
@@ -136,32 +138,8 @@ function Box({ children }) {
   );
 }
 
-function MovieList({ movies, onSelectMovie }) {
-  return (
-    <ul className="list list-movies">
-      {movies?.map((movie) => (
-        <Movie onSelectMovie={onSelectMovie} movie={movie} key={movie.imdbID} />
-      ))}
-    </ul>
-  );
-}
-
-function Movie({ movie, onSelectMovie }) {
-  return (
-    <li onClick={() => onSelectMovie(movie.imdbID)}>
-      {/* Ovaj Id nalazimo tako sto ispisemo u console neki od ovih objekata i vidimo sta sve ima u njemu
-    tu cemo da nadjemo kako su oni nazvali taj id koji cemo mi da koristimo */}
-      <img src={movie.Poster} alt={`${movie.Title} poster`} />
-      <h3>{movie.Title}</h3>
-      <div>
-        <p>
-          <span>🗓</span>
-          <span>{movie.Year}</span>
-        </p>
-      </div>
-    </li>
-  );
-}
+<MovieList />;
+<Movie />;
 
 function WatchedSummary({ watched }) {
   const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
