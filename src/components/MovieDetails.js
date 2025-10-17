@@ -47,12 +47,6 @@ export default function MovieDetails({
     Genre: genre,
   } = movie;
 
-  // const isTop = imdbRating > 8;
-  // console.log(isTop);
-
-  // const [avgRating, setAvgRating] = useState(0);
-
-  //ovaj objekat je da registrujemo za listu gledanih filmova
   function handleAdd() {
     const newWatchedMovie = {
       imdbID: selectedId, //koliko sam razumeo
@@ -72,6 +66,11 @@ export default function MovieDetails({
   }
 
   useKey("Escape", onCloseMovie);
+
+  // const isTop = imdbRating > 8;
+  // console.log(isTop);
+  // const [avgRating, setAvgRating] = useState(0);
+  //ovaj objekat je da registrujemo za listu gledanih filmova
 
   // useEffect(
   //   function () {
