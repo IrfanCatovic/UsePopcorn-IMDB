@@ -49,7 +49,7 @@ export default function MovieDetails({
 
   function handleAdd() {
     const newWatchedMovie = {
-      imdbID: selectedId, //koliko sam razumeo
+      imdbID: selectedId,
       title,
       year,
       poster,
@@ -90,6 +90,7 @@ export default function MovieDetails({
 
   useEffect(
     function () {
+      if (!title) return;
       document.title = `Movie | ${title}`;
 
       return function () {

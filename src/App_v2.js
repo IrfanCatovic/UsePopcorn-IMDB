@@ -363,7 +363,8 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
       document.addEventListener("keydown", callback);
 
       return function () {
-        document.removeEventListener("keydown", callback); //moramo da cistimo da se ne bi dodavali evenListener svaki pud kada zatvorimo film
+        document.removeEventListener("keydown", callback);
+        //moramo da cistimo da se ne bi dodavali evenListener svaki pud kada zatvorimo film
       };
     },
     [onCloseMovie]
