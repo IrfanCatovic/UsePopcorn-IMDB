@@ -13,14 +13,14 @@ export default function App() {
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null);
 
-  const { movies, isLoading, error } = useMovies(query); //CUSTOM HOOK POZIVAMO KOJI SMO NAPRAVILI
+  const { movies, isLoading, error } = useMovies(query, handleCloseMovie); //CUSTOM HOOK POZIVAMO KOJI SMO NAPRAVILI
 
   const [watched, setWatched] = useLocalStorageState([], "watched");
 
   // const [watched, setWatched] = useState([]);
   // const [watched, setWatched] = useState(function () {
   //   const storedValue = localStorage.getItem("watched");
-  //   return JSON.parse(storedValue); //moramo da parsamo jer u database ga cuvamo kao string, a sad ga ne razume bez toga
+  //   return JSON.parse(storedValue);  //moramo da parsamo jer u database ga cuvamo kao string, a sad ga ne razume bez toga
   // });
 
   function handleSelectMovie(id) {
